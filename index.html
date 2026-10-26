@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>DecorWall — магазин декоративних штукатурок</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#0b0c0e;--sf:#181a20;--sf2:#111216;--bd:rgba(255,255,255,.09);--tx:#ececef;--hint:#9ca3af;--gold:#c5a880;--gg:linear-gradient(135deg,#e0c088,#c5a880 50%,#9e7f53);--dk:#0b0c0e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 -apple-system,system-ui,"Segoe UI",sans-serif}
+#app{max-width:460px;margin:0 auto;min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+header{position:sticky;top:0;z-index:5;background:rgba(17,18,22,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}.av{width:34px;height:34px;border-radius:50%;background:var(--gg);color:var(--dk);display:grid;place-items:center;font:700 19px Georgia,serif}
+h1{margin:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--gg);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#hi{margin:0;font-size:11px;color:var(--hint)}
+#cartbtn{position:relative;background:none;font-size:22px;padding:6px 8px}#badge{position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:var(--gold);color:var(--dk);font:700 11px/18px sans-serif;text-align:center;padding:0 4px}
+.box{padding:12px 14px}input,select,textarea{width:100%;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;font:inherit;outline:0}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 14px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;padding:7px 13px;border-radius:18px;background:var(--sf);border:1px solid var(--bd);font-size:12px;color:#d1d5db}.chips button.on{background:var(--gg);color:var(--dk);border-color:transparent;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px 14px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pic{position:relative;height:74px;display:grid;place-items:center;font:600 34px Georgia,serif;color:rgba(255,255,255,.35);background-size:cover;background-position:center}
+.pic-info{position:absolute;top:6px;right:6px;width:18px;height:18px;background:rgba(0,0,0,0.5);color:var(--tx);border-radius:50%;font-size:12px;display:grid;place-items:center;border:1px solid var(--bd);backdrop-filter:blur(4px)}
+.b0{background:linear-gradient(135deg,#6b4f2d,#2a1f12)}.b1{background:linear-gradient(135deg,#34506b,#141c26)}.b2{background:linear-gradient(135deg,#55595f,#1b1d21)}
+.info{padding:10px 11px;flex:1}.info b{display:block;font-size:13px;line-height:1.25}.info small{color:var(--hint);font-size:11px;display:block;margin-top:3px}.pr{margin-top:6px;font-size:12px;color:var(--gold);font-weight:600}
+.pk{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.pk button{padding:4px 9px;border-radius:12px;background:var(--sf2);border:1px solid var(--bd);font-size:11px;color:#d1d5db}.pk button.on{background:var(--gg);color:var(--dk);border-color:transparent;font-weight:600}
+.act{padding:0 11px 11px}.add{width:100%;padding:9px;border-radius:10px;background:rgba(197,168,128,.12);color:var(--gold);border:1px solid rgba(197,168,128,.3);font-weight:600}
+.qty{display:flex;align-items:center;justify-content:space-between}.qty button{width:32px;height:32px;border-radius:50%;background:var(--sf2);border:1px solid var(--bd);font-size:18px}
+.pic,.info b,.info small{cursor:pointer}.pic.big{height:130px;border-radius:14px;margin:10px 0;font-size:56px}.pdesc{color:#d1d5db;line-height:1.5;margin:10px 0}.psum{margin:6px 0 10px;color:var(--gold);font-weight:600;font-size:15px}
+.empty{grid-column:1/-1;text-align:center;color:var(--hint);padding:36px 0}
+nav{position:fixed;left:0;right:0;bottom:0;max-width:460px;margin:auto;display:flex;background:rgba(17,18,22,.96);backdrop-filter:blur(12px);border-top:1px solid var(--bd);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{flex:1;background:none;padding:6px;color:var(--hint);font-size:11px}nav button span{display:block;font-size:19px}nav button.on{color:var(--gold)}
+.go{width:100%;padding:14px;border-radius:12px;background:var(--gg);color:var(--dk);font-weight:700;font-size:15px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--sf2);border:1px solid var(--bd);border-radius:22px 22px 0 0;width:100%;max-width:460px;max-height:92vh;overflow:auto;padding:16px 16px calc(18px + env(safe-area-inset-bottom))}
+.sheet h2{margin:0 0 10px;font-size:17px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}.row small{color:var(--hint)}
+.f{display:grid;gap:8px;margin:12px 0}.err{color:#f87171;font-size:12px;min-height:16px}.tot{display:flex;justify-content:space-between;font-weight:700;padding:10px 0}.tot span:last-child{color:var(--gold)}
+.x{float:right;background:var(--sf);width:32px;height:32px;border-radius:50%;color:var(--hint)}
+.info2{margin:14px;background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:18px;text-align:center}.info2 p{color:var(--hint);margin:6px 0 14px}
+</style></head><body><div id="app">
+<header><div class="logo"><div class="av">D</div><div><h1>DecorWall</h1><p id="hi">Вітаємо в магазині</p></div></div><button id="cartbtn">🛍<span id="badge" hidden></span></button></header>
+<div id="view"></div>
+<nav><button id="t-cat" class="on"><span>🧱</span>Каталог</button><button id="t-con"><span>💬</span>Консультація</button></nav>
+<div class="ov" id="ov" hidden><div class="sheet" id="sheet"></div></div>
+<div class="ov" id="pov" hidden style="z-index:10"><div class="sheet" id="psheet"></div></div></div>
+<script>
+const tg=window.Telegram&&Telegram.WebApp;
+if(tg){tg.ready();tg.expand();try{tg.setHeaderColor("#0b0c0e");tg.setBackgroundColor("#0b0c0e")}catch(e){}
+ const u=tg.initDataUnsafe&&tg.initDataUnsafe.user;if(u&&u.first_name)document.getElementById("hi").textContent="Привіт, "+u.first_name+"!"}
+const CONSULT="https://t.me/taras_karabas_10";
+const CATALOG=[["San Marco","Marmorino Fine","marble"],["San Marco","Marmorino Classico","marble"],["San Marco","Intonachino Minerale","marble"],["San Marco","Concret_Art","concrete"],["San Marco","Rilievo","massa"],["San Marco","Acrisyl","marble"],["San Marco","Cadoro","silk"],["San Marco","Fontego","silk"],["San Marco","Stucco Veneziano","venetian"],["San Marco","Cavenier","silk"],["San Marco","Allover","concrete"],["Feidal","Lava","silk"],["Feidal","Velvet Dekor","silk"],["Feidal","Magie","silk"],["Feidal","Nubuk","silk"],["Feidal","Perle Farbe","silk"],["Feidal","Elegant Farbe","silk"],["Feidal","Sand Farbe","silk"],["Feidal","Travertino Kalkputz","marble"],["Feidal","Strukturputz Antik Dekor Maxi","travertine"],["Feidal","Strukturputz Antik Dekor Mini",""],["Feidal","Silikonharz Antik Dekor Fassad Maxi","marble"],["Feidal","Travertino","massa"],["Feidal","Venedigputz","venetian"],["Feidal","Veneciano","venetian"],["Feidal","Silikonharz Kratzputz","baranets"],["Feidal","Silikonharz Reibeputz","korob"],["Feidal","MikroZement","concrete"],["Caparol","StuccoDecor Di Perla","silk"],["Caparol","Stucco Eleganza","silk"],["Caparol","Arte Noblissima","silk"],["Caparol","Arte Fino","silk"],["Caparol","Stucco Satinato","silk"],["Caparol","Modelliermasse","massa"],["Caparol","Marmorino Romantico","marble"],["Caparol","Caparol Dekor Facade","korob"],["Caparol","Capatect Mosaikputz","baranets"],["Caparol","Capatect Mosaik ArteStone","baranets"]];
+const EFF={"venetian":"Венеціанська штукатурка","marble":"Мармурова штукатурка","silk":"Шовкові та перламутрові покриття","travertine":"Травертин","concrete":"Ефект бетону / мікроцемент","korob":"«Фактурна штукатурка»","baranets":"«Функціональна штукатурка»","stucco":"Перламутрові покриття","massa":"Скеля"};
+const PACKS={"Lava":[["10 л",12507],["5 л",7299],["2,5 л",4215],["1 л",2020]],"Velvet Dekor":[["10 л",12010],["5 л",7096],["2,5 л",4241],["1 л",2129]],"Magie":[["10 л",11438],["5 л",6698],["2,5 л",3927],["1 л",1905]],"Nubuk":[["2,5 л",8669]],"Perle Farbe":[["10 л",9291],["5 л",4895],["2,5 л",2572],["1 л",1081]],"Elegant Farbe":[["5 л",4554],["2,5 л",2522],["1 л",1103]],"Sand Farbe":[["5 л",6765],["2,5 л",3920],["1 л",1898]],"Travertino Kalkputz":[["20 кг",6069]],"Strukturputz Antik Dekor Maxi":[["20 кг",5278],["10 кг",2938]],"Strukturputz Antik Dekor Mini":[["20 кг",5278],["10 кг",2929]],"Silikonharz Antik Dekor Fassad Maxi":[["20 кг",6681],["10 кг",3810]],"Travertino":[["20 кг",5464],["10 кг",3047]],"Venedigputz":[["10 кг",5221],["5 кг",2855],["1 кг",825]],"Veneciano":[["10 кг",9887],["5 кг",5455],["1 кг",1286]],"Silikonharz Kratzputz":[["25 кг",4205]],"Silikonharz Reibeputz":[["25 кг",4104]],"MikroZement":[["16 кг",6503],["8 кг",3400]],"StuccoDecor Di Perla":[["2,5 л",5208]],"Stucco Eleganza":[["2,5 л",8850]],"Arte Noblissima":[["2,5 л",4620]],"Arte Fino":[["2,5 л",4956]],"Stucco Satinato":[["2,5 л",9660]],"Modelliermasse":[["25 кг",4242]],"Marmorino Romantico":[["14 кг",5706]],"Caparol Dekor Facade":[["10 кг",1500]],"Capatect Mosaikputz":[["25 кг",7062]]};
+
+const DESC={
+  "Lava": "Lava — це преміальна декоративна штукатурка з ефектом шовкового блиску. Створює розкішну поверхню з м'яким мерехтінням, що додає інтер'єру глибини та вишуканості. Ідеально підходить для віталень та спалень.",
+  "Velvet Dekor": "Velvet Dekor забезпечує ефект оксамитової поверхні з легким перламутровим відливом. Створює відчуття затишку та тепла в приміщенні.",
+  "MikroZement": "Мікроцемент — це сучасний високоміцний матеріал для створення індустріального стилю (лофт). Вологостійкий та дуже зносостійкий.",
+  "Marmorino Fine": "Вишукана мармурова штукатурка з дрібним зерном для створення ідеально гладких стін з натуральним блиском мармуру."
+};
+
+const EFFD={"venetian":"Ефект полірованого мармуру з глибиною та блиском. Преміальний вигляд для класики й сучасних інтер'єрів.","marble":"Імітація натурального каменю з мяким блиском. Добре підходить для ванних і кухонь.","silk":"М'яке мерехтіння, як у тканини. Затишний варіант для вітальні та спальні.","travertine":"Природна пориста фактура пісочних відтінків. Мінімалізм, лофт, японський стиль.","concrete":"Сучасна фактура з ефектом бетону. Лофт, мінімалізм, комерційні простори.","korob":"Виразний рельєф, практичний і довговічний. Для фасадів та акцентних стін.","baranets":"Дрібнозерниста фактура, маскує нерівності та підходить для великих площ.","stucco":"Перламутровий ефект, який створює ефект мерехтіння, шовкового блиску та глибини. Підходить для класичних інтер'єрів.","massa":"Масивний рельєф, який створює обʼємний ефект. Чудово виглядає на акцентній стіні."};
+
+const BASE_URL = "https://decorwall-shop.burkivskyi-vitaliy.workers.dev/";
+const IMG={
+  "Silikonharz Antik Dekor Fassad Maxi": BASE_URL + "Silikonharz_Antik_Dekor_Fassad_Maxi.jpg",
+  "Strukturputz Antik Dekor Maxi": BASE_URL + "Strukturputz_Antik_Dekor_Maxi.png",
+  "Strukturputz Antik Dekor Mini": BASE_URL + "Strukturputz_Antik_Dekor_Mini.png",
+  "Elegant Farbe": BASE_URL + "Elegant_Farbe.png",
+  "Silikonharz Kratzputz": BASE_URL + "Silikonharz_Kratzputz.png",
+  "Lava": BASE_URL + "Lava.png",
+  "Magie": BASE_URL + "Magie.png",
+  "MikroZement": BASE_URL + "MikroZement.png",
+  "Nubuk": BASE_URL + "Nubuk.png",
+  "Perle Farbe": BASE_URL + "Perle_Farbe.png",
+  "Silikonharz Reibeputz": BASE_URL + "Silikonharz_Reibeputz.png",
+  "Sand Farbe": BASE_URL + "Sand_Farbe.png",
+  "Travertino Kalkputz": BASE_URL + "Travertino_Kalkputz.png",
+  "Travertino": BASE_URL + "Travertino.png",
+  "Velvet Dekor": BASE_URL + "Velvet_Dekor.png",
+  "Veneciano": BASE_URL + "Veneciano.png",
+  "Venedigputz": BASE_URL + "Venedigputz.png"
+};
+
+const DELIV={np:"Нова Пошта",courier:"Кур'єр на об'єкт",pickup:"Самовивіз"};
+const $=id=>document.getElementById(id);
+let cart={},cat="",brand="",term="",tab="cat";const sel={};
+try{cart=JSON.parse(localStorage.getItem("cart")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("cart",JSON.stringify(cart))}catch(e){}};
+const money=n=>n.toLocaleString("uk-UA")+" ₴";
+const BR=[...new Set(CATALOG.map(c=>c[0]))];
+const keyOf=(n,z)=>n+"||"+z;
+const parseKey=k=>{const i=k.indexOf("||");return i<0?[k,""]:[k.slice(0,i),k.slice(i+2)]};
+const unit=(n,z)=>{const p=(PACKS[n]||[]).find(x=>x[0]===z);return p?p[1]:0};
+const size=n=>sel[n]||(PACKS[n]?PACKS[n][0][0]:"");
+for(const k of Object.keys(cart)){const [n,z]=parseKey(k),ok=CATALOG.some(c=>c[1]===n)&&(PACKS[n]?unit(n,z):!z);const v=cart[k];delete cart[k];if(ok)cart[keyOf(n,z)]=v}
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function chip(box,label,on,fn){const b=el("button",on?"on":"",label);b.onclick=fn;box.append(b)}
+function setQty(k,d){const v=(cart[k]||0)+d;if(v<=0)delete cart[k];else cart[k]=Math.min(v,99);save();if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred("light");badge();if(tab==="cat")list();if(!$("ov").hidden)cartView();if(!$("pov").hidden)prodView()}
+function badge(){const c=Object.values(cart).reduce((a,b)=>a+b,0);$("badge").hidden=!c;$("badge").textContent=c}
+function qty(k){const w=el("div","qty"),m=el("button","","−"),p=el("button","","+");m.onclick=()=>setQty(k,-1);p.onclick=()=>setQty(k,1);w.append(m,el("b","",cart[k]),p);return w}
+function show(){const v=$("view");v.replaceChildren();$("t-cat").className=tab==="cat"?"on":"";$("t-con").className=tab==="con"?"on":"";
+ if(tab==="con"){const b=el("div","info2");b.append(el("h2","","Консультація технолога"),el("p","","Допоможемо підібрати штукатурку, фарбу та розрахувати витрату. Напишіть нам у Telegram."));
+  const g=el("button","go","Написати в Telegram");g.onclick=()=>tg&&tg.openTelegramLink?tg.openTelegramLink(CONSULT):window.open(CONSULT);b.append(g);v.append(b);return}
+ const s=el("div","box"),i=el("input");i.type="search";i.placeholder="Пошук за назвою…";i.value=term;i.oninput=e=>{term=e.target.value.trim().toLowerCase();list()};s.append(i);
+ const c1=el("div","chips"),c2=el("div","chips");c1.id="c1";c2.id="c2";const g=el("div","grid");g.id="grid";v.append(s,c1,c2,g);list()}
+function list(){
+ const c1=$("c1"),c2=$("c2"),g=$("grid");if(!g)return;c1.replaceChildren();c2.replaceChildren();g.replaceChildren();
+ chip(c1,"Усі типи",!cat,()=>{cat="";list()});for(const k of new Set(CATALOG.map(c=>c[2]).filter(Boolean)))chip(c1,EFF[k]||k,cat===k,()=>{cat=k;list()});
+ chip(c2,"Усі бренди",!brand,()=>{brand="";list()});for(const b of BR)chip(c2,b,brand===b,()=>{brand=b;list()});
+ const rows=CATALOG.filter(c=>(!brand||c[0]===brand)&&(!cat||c[2]===cat)&&c[1].toLowerCase().includes(term));
+ if(!rows.length)g.append(el("div","empty","Нічого не знайдено"));
+ for(const [b,n,e] of rows){const k=el("div","card"),p=el("div","pic b"+BR.indexOf(b),IMG[n]?"":b[0]);if(IMG[n])p.style.backgroundImage="url('"+IMG[n].replace(/'/g,"")+"')";
+
+  // Додаємо маленьку кнопку "i" для інфо
+  const infoIcon=el("div","pic-info","i");
+  infoIcon.onclick=e=>{e.stopPropagation(); openProd(n)};
+  p.append(infoIcon);
+
+  const i=el("div","info"),z=size(n),pk=PACKS[n];const t1=el("b","",n),t2=el("small","",b+(EFF[e]?" · "+EFF[e]:""));p.onclick=t1.onclick=t2.onclick=()=>openProd(n);i.append(t1,t2);
+  if(pk){i.append(el("div","pr",money(unit(n,z))+" · "+z));
+   if(pk.length>1){const w=el("div","pk");for(const [q] of pk){const bt=el("button",q===z?"on":"",q);bt.onclick=()=>{sel[n]=q;list()};w.append(bt)}i.append(w)}
+  }
+  else i.append(el("div","pr","ціну уточнить менеджер"));
+  const key=keyOf(n,z),a=el("div","act");if(cart[key])a.append(qty(key));else{const ad=el("button","add","+ В кошик");ad.onclick=()=>setQty(key,1);a.append(ad)}
+  k.append(p,i,a);g.append(k)}}
+function cartView(){
+ const s=$("sheet");s.replaceChildren();const x=el("button","x","✕");x.onclick=()=>{$("ov").hidden=true};s.append(x,el("h2","","🛍 Ваше замовлення"));
+ const keys=Object.keys(cart);if(!keys.length){s.append(el("div","empty","Кошик порожній"));return}
+ let sum=0,all=true;
+ for(const k of keys){const [n,z]=parseKey(k),u=unit(n,z);if(u)sum+=u*cart[k];else all=false;
+  const r=el("div","row"),i=el("div");i.append(el("b","",n),el("br"),el("small","",(z?z+" · ":"")+(u?money(u)+" × "+cart[k]+" = "+money(u*cart[k]):"ціну уточнить менеджер")));r.append(i,qty(k));s.append(r)}
+ const sumText=sum?(all?"":"від ")+money(sum)+(all?"":" + позиції без ціни"):"уточнить менеджер";
+ const t=el("div","tot");t.append(el("span","",all?"Разом:":"Сума:"),el("span","",sumText));s.append(t);
+ const f=el("div","f"),nm=el("input"),ph=el("input"),dl=el("select"),cm=el("textarea");
+ nm.placeholder="Ім'я та прізвище";nm.value=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"";
+ ph.type="tel";ph.placeholder="Телефон (+380…)";for(const k in DELIV){const o=el("option","",DELIV[k]);o.value=k;dl.append(o)}
+ cm.rows=2;cm.maxLength=120;cm.placeholder="Коментар: місто, площа, побажання (необов'язково)";
+ const er=el("div","err"),go=el("button","go","Оформити замовлення");
+ go.onclick=()=>{const name=nm.value.trim(),phone=ph.value.trim();
+  if(name.length<2)return er.textContent="Вкажіть ім'я";if(phone.replace(/\D/g,"").length<10)return er.textContent="Вкажіть коректний номер телефону";
+  const note=[sum&&"Сума: "+(all?"":"від ")+money(sum)+(all?" (орієнтовно)":" + позиції без ціни"),"Ім'я: "+name,"Тел.: "+phone,"Доставка: "+(DELIV[dl.value]||DELIV.np),cm.value.trim()&&"Коментар: "+cm.value.trim()].filter(Boolean).join("; ").slice(0,400);
+  const data=JSON.stringify({v:1,items:keys.map(k=>{const [n,z]=parseKey(k);return [n,cart[k],z,unit(n,z)]}),note});
+  if(tg&&tg.sendData)tg.sendData(data);else alert("Відкрийте магазин у Telegram, щоб надіслати замовлення.\n\n"+data)};
+ f.append(nm,ph,dl,cm);s.append(f,er,go)}
+let curProd=null;
+function openProd(n){curProd=n;prodView();$("pov").hidden=false}
+function closeProd(){curProd=null;$("pov").hidden=true}
+function prodView(){
+ const n=curProd,row=CATALOG.find(c=>c[1]===n);if(!row)return;const [b,,e]=row;
+ const s=$("psheet");s.replaceChildren();const x=el("button","x","✕");x.onclick=closeProd;
+ const pic=el("div","pic big b"+BR.indexOf(b),IMG[n]?"":b[0]);if(IMG[n])pic.style.backgroundImage="url('"+IMG[n].replace(/'/g,"")+"')";
+ s.append(x,el("h2","",n),el("small","",b+(EFF[e]?" · "+EFF[e]:"")),pic);
+ const d=DESC[n]||EFFD[e]||"";if(d)s.append(el("p","pdesc",d));
+ const z=size(n),pk=PACKS[n];
+ if(pk){if(pk.length>1){const w=el("div","pk");for(const [q] of pk){const bt=el("button",q===z?"on":"",q);bt.onclick=()=>{sel[n]=q;list();prodView()};w.append(bt)}s.append(w)}
+  s.append(el("div","psum",money(unit(n,z))+" · "+z))}
+ else s.append(el("div","psum","ціну уточнить менеджер"));
+ const key=keyOf(n,z),a=el("div","act");a.style.padding="0";
+ if(cart[key])a.append(qty(key));else{const ad=el("button","go","+ В кошик");ad.onclick=()=>setQty(key,1);a.append(ad)}
+ s.append(a)}
+$("pov").onclick=e=>{if(e.target.id==="pov")closeProd()};
+$("cartbtn").onclick=()=>{cartView();$("ov").hidden=false};
+$("ov").onclick=e=>{if(e.target.id==="ov")$("ov").hidden=true};
+$("t-cat").onclick=()=>{tab="cat";show()};$("t-con").onclick=()=>{tab="con";show()};
+badge();show();
+</script></body></html>
